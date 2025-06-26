@@ -3,6 +3,7 @@ const cors = require('cors');
 const connectedDB=require('./config/db')
 require('dotenv').config();
 const authRout= require("./routes/auth");
+const authHotel= require('./routes/hotel');
 
 
 const app = express();
@@ -15,7 +16,8 @@ app.get('/api/test',(req,res)=>{
     res.json({message:'server is working..!'})
 })
 
-app.use('/api/auth',authRout)
+app.use('/api/auth',authRout);
+app.use('/api/hotels',authHotel)
 
 
 

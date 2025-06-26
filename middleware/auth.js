@@ -6,7 +6,7 @@ require('dotenv').config();
 //checking for if the user is authenticated or not
 const auth= async(req,res,next)=>{
     try{
-        const token =req.header('Authorzation')?.replace('Bearer','');
+        const token =req.header('Authorzation')?.replace('Bearer ','');
         
         if(!token){
             return res.status(401).json({message:"No token,access denied"});
@@ -24,9 +24,9 @@ const auth= async(req,res,next)=>{
 
 //checking for if the admin is authenticated or not
 
-const adminAuth = async(req,res)=>{
+const adminAuth = async(req,res,next)=>{
     try{
-        const token = req.header('Authorization')?.replace('Bearer','');
+        const token = req.header('Authorization')?.replace('Bearer ','');
         if(!token){
             res.status(401).json({message:"No token,access denied"});
         }
