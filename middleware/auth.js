@@ -26,7 +26,8 @@ const auth= async(req,res,next)=>{
 
 const adminAuth = async(req,res,next)=>{
     try{
-        const token = req.header('Authorization')?.replace('Bearer ','');
+       const token = req.header('Authorization')?.replace('Bearer ', '');
+      
         if(!token){
             res.status(401).json({message:"No token,access denied"});
         }
@@ -41,6 +42,7 @@ const adminAuth = async(req,res,next)=>{
 
     }catch(error){
             res.status(401).json({ message: 'Token is not valid' });
+          
 
     }
 }

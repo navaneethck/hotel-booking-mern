@@ -16,7 +16,7 @@ router.post('/Add-Hotel',adminAuth,async (req,res)=>{
         res.status(500).json({ message: error.message });
     }
 })
-
+//to get all hotel
 router.get('/All-Hotel',async (req,res)=>{
     try{
         const hotels= await Hotel.find();
@@ -54,6 +54,42 @@ router.get('/search/:location',async (req,res)=>{
          res.status(500).json({ message: error.message });
 
     }
+})
+
+//update hotel(admin)
+router.put('/:id',adminAuth,async (req,res)=>{
+    try{
+        const hotel= await Hotel.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            {new:true}
+        );
+        
+        if(!hotel){
+            return res.status(404).json({message:'Hotel not found'})
+        }
+
+        res.json(hotel)
+
+    }catch(error){
+    res.status(500).json({ message: error.message });
+    }
+})
+
+//delete hotel(admin)
+router.delete('/:id',async (req,res)=>{
+    try{
+
+        const hotel=await Hotel.findByIdAndDelete(req.params.id);
+        if(!hotel){
+            res.status(404).json({message:'Hotle not found'});
+        }
+
+        res.json({ message: 'Hotel deleted successfully' });
+    }catch(error){
+        res.status(500).json({ message: error.message });
+    }
+
 })
 
 module.exports = router;
