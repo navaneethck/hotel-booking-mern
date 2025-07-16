@@ -4,7 +4,7 @@ const connectedDB=require('./config/db')
 require('dotenv').config();
 const authRout= require("./routes/auth");
 const authHotel= require('./routes/hotel');
-
+const authBooking = require('./routes/bookingRoutes')
 
 const app = express();
 
@@ -18,7 +18,7 @@ app.get('/api/test',(req,res)=>{
 
 app.use('/api/auth',authRout);
 app.use('/api/hotels',authHotel)
-
+app.use('/api/booking',authBooking);
 
 
 

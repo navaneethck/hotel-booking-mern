@@ -1,6 +1,6 @@
 const mongoose= require('mongoose');
 
-const bookinSchema= new mongoose.Schema({
+const bookingSchema= new mongoose.Schema({
 
 user:{
     type:mongoose.Schema.Types.ObjectId,
@@ -20,10 +20,10 @@ checkOutDate:{
     type:Date,
     required:true
 },
-roomType:{
-    type:Number,
-    required:true,
-    min:1
+roomType: {
+  type: String,
+  enum: ['Standard', 'Deluxe', 'Suite'],
+  required: true
 },
   totalAmount: {
     type: Number,
@@ -58,7 +58,7 @@ function generateBookingRef() {
   return 'BK' + Math.floor(100000 + Math.random() * 900000);
 }
 
-bookinSchema.pre('save', function(next){
+bookingSchema.pre('save', function(next){
     if(!this.bookingReference){
          this.bookingReference = generateBookingRef();
     }

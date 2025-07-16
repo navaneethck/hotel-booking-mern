@@ -4,14 +4,14 @@ const {auth,adminAuth} = require('../middleware/auth');
 const router=express.Router();
 
 //ading new hotel admin side
-router.post('/Add-Hotel',adminAuth,async (req,res)=>{
+router.post('/Add-Hotel',async (req,res)=>{
     try{
-        const {name, location, description, images, price, amenities,rooms,rating,address,contact,availability}=req.body;
+        const {name, location, description, images, price, amenities,rooms,rating,address,contact,availability,roomTypes}=req.body;
 
-        const hotel= new Hotel({name, location, description, images, price, amenities,rooms,rating,address,contact,availability})
+        const hotel= new Hotel({name, location, description, images, price, amenities,rooms,rating,address,contact,availability,roomTypes})
 
         await hotel.save();
-        res.status(201).json(hotel,{message:"successfully added"})
+        res.status(201).json({hotel,message:"successfully added"})
     }catch(error){
         res.status(500).json({ message: error.message });
     }

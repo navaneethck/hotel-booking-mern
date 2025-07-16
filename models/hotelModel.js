@@ -52,7 +52,27 @@ const hotelSchema=new mongoose.Schema({
     availability: {
         type: Boolean,
         default: true
+    },
+    roomTypes: [
+  {
+    name: {
+      type: String,
+      enum: ['Standard', 'Deluxe', 'Suite'],
+      required: true
+    },
+    price: {
+      type: Number,
+      required: true,
+      min: 0
+    },
+    totalRooms: {
+      type: Number,
+      required: true,
+      min: 1
     }
+  }
+]
+
 
 
 },{timestamps:true})
