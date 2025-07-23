@@ -82,5 +82,5 @@ hotelSchema.index({location:1,price:1});
 hotelSchema.index({name:'text'});
 
 
-module.exports=mongoose.model('hotel',hotelSchema);
+module.exports=mongoose.model('Hotel',hotelSchema);
 

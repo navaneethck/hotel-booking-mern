@@ -1,81 +1,62 @@
-const Booking = require('../models/bookingModel');
-const Hotel=require('../models/hotelModel');
+const Booking =  require('../models/bookingModel');
+const {checkRoomAvailability } = require('../controller/checkAvailabilityController');
 
-const checkAvailability = async (req,res) =>{
+
+const createBooking = async(req,res)=>{
     try{
-        const { hotelId, checkInDate, checkOutDate, roomType, numberOfRooms } = req.query;
 
-        const checkIn = new Date(checkInDate);
-        const checkOut = new Date(checkOutDate);
-        const today = new Date();
+     const {  hotelId,
+      checkInDate,
+      checkOutDate,
+      roomType,
+      numberOfRooms,
+      guests,
+      specialRequests} = req.body;
 
-    if (checkIn < today) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Check-in date cannot be in the past' 
-      });
-    }
-    
-    if (checkOut <= checkIn) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Check-out date must be after check-in date' 
-      });
-    }
+      const result = await checkRoomAvailability ({hotelId, checkInDate, checkOutDate, roomType, numberOfRooms});
 
-    const hotel= await Hotel.findById(hotelId);
-    console.log(hotel)
-        if (!hotel) {
-      return res.status(404).json({ 
-        success: false, 
-        message: 'Hotel not found' 
-      });
-    }
+      if(!result.success){
 
-    const roomTypeData = hotel.roomTypes.find(rt=>rt.name.toLowerCase()===roomType.toLowerCase());
-    
-    if(!roomTypeData){
-        return res.status(404).json({ 
-        success: false, 
-        message: 'Room type not found' 
-      });
-    }
+        return res.status(400).json({success:false,message:result.message});
+      }
 
-    //checking for dates overlapping
-    const overlappingBookings = await Booking.find({
-        hotel:hotelId,
-        roomType:roomType,
-        status: { $in: ['pending','confirmed']},
-        checkInDate:{$lt: checkOut},
-        checkOutDate: {$gt: checkIn}
-    })
+      const { roomTypeData, totalNights} = result;
 
-    const totalBookedRooms = overlappingBookings.reduce((sum,booking)=>{
-        return sum + booking.numberOfRooms;
-    },0);
+      const newBooking = new Booking({
 
-    const availRooms = roomTypeData.totalRooms - totalBookedRooms;
-    const isAvailable = availRooms >=numberOfRooms;
-    const totalNights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
-    res.json({
-        success:true,
-        available: isAvailable,
-        availableRooms: availRooms,
-        requestedRooms: numberOfRooms,
-        roomType: roomType,
-        pricePerNight:roomTypeData.price,
-        totalNights: totalNights,
-        estimatedTotal: roomTypeData.price * numberOfRooms *totalNights
+        user:"685a51604df158309afbe600",
+        hotel: hotelId,
+        roomType,
+        numberOfRooms,
+        checkInDate,
+        checkOutDate,
+        status: 'pending',
+        totalAmount: roomTypeData.price * numberOfRooms * totalNights,
+        guests,
+        specialRequests,
+
+      })
+
+      await newBooking.save();
+
+      await newBooking.populate('user', 'name email')
+      await newBooking.populate('hotel', 'name location');
+
+
+      res.status(201).json({
+      success: true,
+      message: 'Booking created successfully',
+      newBooking
     });
-
+      
     }catch(error){
-    res.status(500).json({ 
-      success: false, 
-      message: error.message 
+
+      res.status(500).json({
+      success: false,
+      message: error.message
     });
+
     }
 }
 
-module.exports = {
-    checkAvailability
-}
+module.exports = { createBooking };
