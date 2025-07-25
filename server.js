@@ -21,8 +21,6 @@ app.use('/api/hotels',authHotel)
 app.use('/api/booking',authBooking);
 
 
-
-
 connectedDB()
 
 const PORT = process.env.PORT || 3400

@@ -39,7 +39,7 @@ const createBooking = async(req,res)=>{
 
       await newBooking.save();
 
-      await newBooking.populate('user', 'name email')
+      await newBooking.populate('user', 'name email');
       await newBooking.populate('hotel', 'name location');
 
 

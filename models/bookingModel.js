@@ -15,6 +15,7 @@ hotel:{
 checkInDate:{
     type:Date,
     required:true
+  
 },
 checkOutDate:{
     type:Date,
