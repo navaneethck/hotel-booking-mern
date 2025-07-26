@@ -5,6 +5,7 @@ require('dotenv').config();
 const authRout= require("./routes/auth");
 const authHotel= require('./routes/hotel');
 const authBooking = require('./routes/bookingRoutes')
+const adminAuth = require('./routes/adminAuth')
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.get('/api/test',(req,res)=>{
 app.use('/api/auth',authRout);
 app.use('/api/hotels',authHotel)
 app.use('/api/booking',authBooking);
+app.use('/api/All-bookings',adminAuth);
 
 
 connectedDB()
