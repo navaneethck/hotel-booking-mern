@@ -71,9 +71,26 @@ const hotelSchema=new mongoose.Schema({
       min: 1
     }
   }
-]
-
-
+],
+  bookingPolicy: {
+    freeCancellationHours: { type: Number, default: 24 }, 
+    minStayNights: { type: Number, default: 1 },
+    maxGuestsPerRoom: { type: Number, default: 2 },
+    refundRules: [
+      {
+        hoursBeforeCheckIn: {
+            type: Number,
+            required: true
+        },
+        refundPercentage: {
+            type: Number,
+            required: true,
+            min: 0,
+            max: 100
+        }
+    }
+    ]
+  }
 
 },{timestamps:true})
 

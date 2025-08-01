@@ -6,9 +6,9 @@ const router=express.Router();
 //ading new hotel admin side
 router.post('/Add-Hotel',async (req,res)=>{
     try{
-        const {name, location, description, images, price, amenities,rooms,rating,address,contact,availability,roomTypes}=req.body;
+        const {name, location, description, images, price, amenities,rooms,rating,address,contact,availability,roomTypes, bookingPolicy }=req.body;
 
-        const hotel= new Hotel({name, location, description, images, price, amenities,rooms,rating,address,contact,availability,roomTypes})
+        const hotel= new Hotel({name, location, description, images, price, amenities,rooms,rating,address,contact,availability,roomTypes, bookingPolicy })
 
         await hotel.save();
         res.status(201).json({hotel,message:"successfully added"})

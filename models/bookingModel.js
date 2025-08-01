@@ -50,6 +50,17 @@ roomType: {
     type: String,
     maxLength: 500
   },
+  cancelledAt: {
+    type: Date
+  },
+  cancelledBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+  },
+  cancellationReason:{
+    type: String,
+    maxLength: 500
+  },
 },{
     timestamps:true
   }
